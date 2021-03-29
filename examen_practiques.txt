@@ -1,0 +1,34 @@
+(deffacts datos
+(numeros 5 3 8 14 7)
+(auxiliar 0)
+(auxiliar1 0)
+(auxuliar2 0)
+(resultado 21)
+)
+
+(defrule multiplicacion
+	(numeros ?x ?y $?z)
+
+=>
+
+	(assert auxiliar (* ?x ?y))
+	(retract ?x ?y)
+)
+
+(defrule dividir
+	(numeros $?x ?y ?z)
+
+=>
+
+	(assert auxiliar (/ ?x ?y))
+	(retract ?y ?z)
+)
+
+(defrule resta
+	(numeros $?x ?y ?z)
+
+=>
+
+	(assert auxiliar (/ ?x ?y))
+	(retract ?y ?z)
+)
