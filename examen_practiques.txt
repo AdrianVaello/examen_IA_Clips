@@ -3,16 +3,18 @@
 (auxiliar 0)
 (auxiliar1 0)
 (auxuliar2 0)
-(resultado 21)
+(resultado 0)
+(final 21)
 )
 
 (defrule multiplicacion
+	(declare(salience 100))  
 	(numeros ?x ?y $?z)
 
 =>
 
-	(assert auxiliar (* ?x ?y))
-	(retract ?x ?y)
+	(assert (auxiliar (* ?x ?y)))
+	(assert (numeros $?z))
 )
 
 (defrule dividir
@@ -20,15 +22,35 @@
 
 =>
 
-	(assert auxiliar (/ ?x ?y))
-	(retract ?y ?z)
+	(assert (auxiliar1 (/ ?y ?z)))
+	(assert (numeros $?x))
 )
 
 (defrule resta
-	(numeros $?x ?y ?z)
-
+	(numeros $?x ?y $?z)
+	(auxiliar1 ?a)
+	
 =>
 
-	(assert auxiliar (/ ?x ?y))
-	(retract ?y ?z)
+	(assert (auxiliar2 (- ?y ?a)))
+	(assert (numeros $?x $?z))
+)
+
+(defrule suma
+	(auxiliar ?a)
+	(auxiliar2 ?b)
+=>
+
+	(assert (resultado (+ ?a ?b)))
+
+)
+
+(defrule meta
+	(declare(salience 101)) 
+	(resultado ?res)
+	(final ?f)
+	(test (= ?res ?f))
+=>
+	(printout t "Estamos en la meta" crlf)
+	(halt)
 )
